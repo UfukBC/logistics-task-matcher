@@ -358,43 +358,52 @@ Where:
 
 ## 📝 Example Usage
 
-### Complete Workflow
+### Quick Test Script
 
+For Windows PowerShell users, use the included `test-api.ps1` script:
+```powershell
+.\test-api.ps1
+```
+
+### Manual Testing
+
+#### 1. Health Check
 ```bash
-# 1. Check health
 curl http://localhost:8080/health
+```
 
-# 2. Create employees
+#### 2. Create Employee
+```bash
 curl -X POST http://localhost:8080/employees \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Alice",
+    "name": "Alice Johnson",
     "location": {"lat": 60.1699, "lon": 24.9384},
     "skills": ["delivery", "driving"]
   }'
+```
 
-curl -X POST http://localhost:8080/employees \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Bob",
-    "location": {"lat": 60.2055, "lon": 24.6559},
-    "skills": ["delivery"]
-  }'
-
-# 3. Create a task (triggers assignment)
+#### 3. Create Task (Auto-assigns to nearest available employee)
+```bash
 curl -X POST http://localhost:8080/tasks \
   -H "Content-Type: application/json" \
   -d '{
     "location": {"lat": 60.1700, "lon": 24.9400},
     "required_skill": "delivery"
   }'
+```
 
-# 4. Check task status
+#### 4. Get All Tasks
+```bash
 curl http://localhost:8080/tasks
+```
 
-# 5. Check employees (see availability status)
+#### 5. Get All Employees
+```bash
 curl http://localhost:8080/employees
 ```
+
+**Note**: For detailed curl examples with multiple employees and edge cases, see the `test-api.ps1` script.
 
 ## 🛠️ Troubleshooting
 
