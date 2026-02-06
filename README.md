@@ -191,21 +191,25 @@ GET /tasks/:id
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- Go 1.21 or higher
+- Go 1.23 or higher
 - Docker & Docker Compose (optional)
 
 ### Option 1: Run with Go
 
 1. **Clone and navigate to the project:**
 ```bash
-git clone <repository-url>
-cd task-assignment-engine
+git clone <your-repository-url>
+cd GoProject
 ```
 
 2. **Install dependencies:**
 ```bash
 go mod download
+# or
+go mod tidy
 ```
+
+**Note**: If `go.sum` is missing, run `go mod tidy` to generate it.
 
 3. **Run the application:**
 ```bash
@@ -256,13 +260,21 @@ go test -v
 ### Run Tests with Coverage
 ```bash
 go test -v -cover -coverprofile=coverage.out
-go tool cover -html=coverage.out
+go tool cover -html=coverage.out -o coverage.html
+# Open coverage.html in browser to view detailed coverage
 ```
 
 ### Run Benchmarks
 ```bash
 go test -bench=. -benchmem
 ```
+
+### Run Race Detector (Detect Data Races)
+```bash
+go test -race -v
+```
+
+**Important**: Always run with `-race` flag before deploying to ensure no concurrency bugs.
 
 ### Test Coverage Includes:
 - ✅ Haversine distance calculation accuracy
@@ -358,22 +370,23 @@ Where:
 
 ## 📝 Example Usage
 
-### Quick Test Script
+### Quick Test Script (Recommended)
 
-For Windows PowerShell users, use the included `test-api.ps1` script:
+**Windows PowerShell:**
 ```powershell
 .\test-api.ps1
 ```
 
+This script demonstrates the complete workflow with multiple employees and tasks.
+
 ### Manual Testing
 
-#### 1. Health Check
+#### Linux/Mac (bash):
 ```bash
+# Health Check
 curl http://localhost:8080/health
-```
 
-#### 2. Create Employee
-```bash
+# Create Employee
 curl -X POST http://localhost:8080/employees \
   -H "Content-Type: application/json" \
   -d '{
@@ -381,10 +394,8 @@ curl -X POST http://localhost:8080/employees \
     "location": {"lat": 60.1699, "lon": 24.9384},
     "skills": ["delivery", "driving"]
   }'
-```
 
-#### 3. Create Task (Auto-assigns to nearest available employee)
-```bash
+# Create Task
 curl -X POST http://localhost:8080/tasks \
   -H "Content-Type: application/json" \
   -d '{
@@ -393,17 +404,36 @@ curl -X POST http://localhost:8080/tasks \
   }'
 ```
 
-#### 4. Get All Tasks
-```bash
-curl http://localhost:8080/tasks
+#### Windows PowerShell:
+```powershell
+# Health Check
+Invoke-RestMethod -Uri http://localhost:8080/health
+
+# Create Employee
+$employee = @{
+    name = "Alice Johnson"
+    location = @{ lat = 60.1699; lon = 24.9384 }
+    skills = @("delivery", "driving")
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri http://localhost:8080/employees -Method Post -Body $employee -ContentType "application/json"
+
+# Create Task
+$task = @{
+    location = @{ lat = 60.1700; lon = 24.9400 }
+    required_skill = "delivery"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri http://localhost:8080/tasks -Method Post -Body $task -ContentType "application/json"
+
+# Get All Tasks
+Invoke-RestMethod -Uri http://localhost:8080/tasks
+
+# Get All Employees
+Invoke-RestMethod -Uri http://localhost:8080/employees
 ```
 
-#### 5. Get All Employees
-```bash
-curl http://localhost:8080/employees
-```
-
-**Note**: For detailed curl examples with multiple employees and edge cases, see the `test-api.ps1` script.
+**Note**: For a complete workflow demo, use the `test-api.ps1` script.
 
 ## 🛠️ Troubleshooting
 
@@ -429,10 +459,10 @@ docker-compose up --build
 
 ## 📚 Technology Stack
 
-- **Language**: Go 1.21
+- **Language**: Go 1.23
 - **Web Framework**: Gin
 - **Concurrency**: Goroutines & Channels
-- **Testing**: Go's built-in testing package
+- **Testing**: Go's built-in testing package + race detector
 - **Containerization**: Docker & Docker Compose
 - **Architecture**: Clean Architecture (simplified)
 

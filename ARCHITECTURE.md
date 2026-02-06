@@ -33,17 +33,17 @@
                 ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    BUSINESS LOGIC LAYER (models.go)                 │
-│                                                                       │
-│  ┌────────────────────────────────────────────────────────────┐    │
-│  │  TaskAssigner (Core Algorithm)                              │    │
+│                                                                     │
+│  ┌────────────────────────────────────────────────────────────┐     │
+│  │  TaskAssigner (Core Algorithm)                             │    │
 │  │  ┌──────────────────────────────────────────────────────┐  │    │
 │  │  │  1. Filter employees by skill & availability         │  │    │
-│  │  │  2. Calculate distances (Haversine)                   │  │    │
-│  │  │  3. Select closest employee                           │  │    │
-│  │  │  4. Update task & employee status                     │  │    │
+│  │  │  2. Calculate distances (Haversine)                  │  │    │
+│  │  │  3. Select closest employee                          │  │    │
+│  │  │  4. Update task & employee status                    │  │    │
 │  │  └──────────────────────────────────────────────────────┘  │    │
 │  └────────────────────────────────────────────────────────────┘    │
-│                                                                       │
+│                                                                    │
 │  ┌────────────────────────────────────────────────────────────┐    │
 │  │  AssignmentWorkerPool (Concurrency)                         │    │
 │  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │    │
